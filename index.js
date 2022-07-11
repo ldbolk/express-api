@@ -102,8 +102,13 @@ app.put("/courses/:id", (req, res) => {
 /////////////////////////////////////////////////////////////////
 
 app.delete("/courses/:id", (req, res) => {
-    let searchId = parseInt(req.params.id)
-    res.send({ id: searchId, deleted: true })
+    mongo.delete("courses", req.params.id)
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        res.send(err)
+    })
 })
 
 
