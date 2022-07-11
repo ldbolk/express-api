@@ -1,4 +1,5 @@
-import express, { response } from "express"
+import express, { request, response } from "express";
+import mongo from './mongo.js';
 
 const app = express();
 
@@ -10,7 +11,10 @@ app.use((req, res, next) => {
     next();
 })
 
-// Variables
+// Variables /////////////
+
+const mongoUrl = "mongodb://localhost:27017"
+const mongoDB = "express"
 const courses = [
     { id: 1, name: "Javascript" },
     { id: 2, name: "NodeJS" },
@@ -26,9 +30,20 @@ let course = {
 let url = "http://localhost:3000/courses"
 
 
-//Get
+// Other /////////////
+
+
+
+//Get /////////////
 app.get("/", (req, res) => {
-    res.send({page: "Homepage"})
+    mongo.list()
+    .then(response => {
+        res.send(response)
+    })
+    .catch( err => {
+        res.send(err)
+    })
+
 })
 
 app.get("/courses", (req, res) => {
@@ -45,8 +60,16 @@ app.get("/courses/:id", (req, res) => {
 
 //POST
 app.post("/courses", (req, res) => {
-    console.log(req.body)
-    res.send({ received: req.body })
+    let data = req.body;
+    mongo.create("courses", data)
+    
+    .then(result => {
+        res.send(result)
+    })
+
+    .catch(err => {
+        response.send(err)
+    })
 })
 
 
@@ -75,11 +98,13 @@ fetch(url, {
 })
 .then(entry => entry.json())
 .then(entry => {
-    console.log(entry)
+    //console.log(entry)
 })
 .catch(err => {
     console.log(err)
 })
+
+//////////////////////////////////////////////////////////////
 
 app.listen(3000, () => {
     console.log("I am alive");
