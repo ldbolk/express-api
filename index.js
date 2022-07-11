@@ -47,13 +47,23 @@ app.get("/", (req, res) => {
 })
 
 app.get("/courses", (req, res) => {
-    res.send(courses);
+    mongo.fetch("courses", null)
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        res.send(err)
+    })
 })
 
 app.get("/courses/:id", (req, res) => {
-    let searchId = parseInt(req.params.id)
-    let result = courses.filter( course => course.id === searchId);
-    res.send(result[0])
+    mongo.fetch("courses", req.params.id)
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        res.send(err)
+    })
 })
 
 /////////////////////////////////////////////////////////////////
@@ -62,11 +72,9 @@ app.get("/courses/:id", (req, res) => {
 app.post("/courses", (req, res) => {
     let data = req.body;
     mongo.create("courses", data)
-    
     .then(result => {
         res.send(result)
     })
-
     .catch(err => {
         response.send(err)
     })
