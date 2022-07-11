@@ -6,6 +6,28 @@ const mongoDB = "express";
 // Returns a list of all databases
 export default class mongo {
 
+    static update = (collection, id, data) => 
+        new Promise((resolve, reject) => {
+            let query = { _id: new ObjectId(id) }
+            let newData = { $set: data }
+
+            MongoClient.connect(mongoUrl, (err, client) => {
+                if(err) {
+                    reject({ error: err })
+                }
+                let db = client.db(mongoDB)
+
+                db.collection(collection)
+                .updateOne(query, newData, (err, result) => {
+                    client.close()
+                    if(err) {
+                        reject({ error:err })
+                    }
+                    resolve({ _id: id, updated: true})
+                })
+            })
+        })
+
     static fetch = (collection, id) => new Promise( (resolve, reject) => {
         let query = id ? { _id: new ObjectId(id) } : {}
 

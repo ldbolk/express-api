@@ -66,9 +66,10 @@ app.get("/courses/:id", (req, res) => {
     })
 })
 
-/////////////////////////////////////////////////////////////////
 
 //POST
+/////////////////////////////////////////////////////////////////
+
 app.post("/courses", (req, res) => {
     let data = req.body;
     mongo.create("courses", data)
@@ -85,9 +86,17 @@ app.post("/courses", (req, res) => {
 /////////////////////////////////////////////////////////////////
 
 app.put("/courses/:id", (req, res) => {
-    let searchId = parseInt(req.params.id)
-    res.send({ id: searchId, received: req.body })
+    let data = req.body
+
+    mongo.update("courses", req.params.id, data)
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        res.send(err)
+    })
 })
+
 
 // DELETE
 /////////////////////////////////////////////////////////////////
@@ -97,20 +106,21 @@ app.delete("/courses/:id", (req, res) => {
     res.send({ id: searchId, deleted: true })
 })
 
+
 ////////////////////////////////////////////////////////////////
 
-fetch(url, {
-    method: "POST",
-    headers: { 'Content-type': 'application/json' },
-    body: JSON.stringify(course)
-})
-.then(entry => entry.json())
-.then(entry => {
-    //console.log(entry)
-})
-.catch(err => {
-    console.log(err)
-})
+// fetch(url, {
+//     method: "POST",
+//     headers: { 'Content-type': 'application/json' },
+//     body: JSON.stringify(course)
+// })
+// .then(entry => entry.json())
+// .then(entry => {
+//     //console.log(entry)
+// })
+// .catch(err => {
+//     console.log(err)
+// })
 
 //////////////////////////////////////////////////////////////
 
