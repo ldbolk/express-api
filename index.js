@@ -7,7 +7,7 @@ app.use(express.json());
 app.use((req, res, next) => {
     res.setHeader("Acess-Control-Allow-Origin", "*")
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
-    res.setHeader("Access-Control-Allow-Header", "X-Requesred-With, content-type")
+    res.setHeader("Access-Control-Allow-Header", "X-Requested-With, content-type")
     next();
 })
 
