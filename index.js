@@ -27,7 +27,7 @@ let course = {
     technology: ["JavaScript", "NodeJS", "Express", "MongoDB"]
 }
 
-let url = "http://localhost:3000/courses"
+let url = "http://localhost:3000/" // /courses
 
 
 // Other /////////////
@@ -46,7 +46,8 @@ app.get("/", (req, res) => {
 
 })
 
-app.get("/courses", (req, res) => {
+app.get("/*", (req, res) => { //* added so anything can be entered for this call
+    
     mongo.fetch("courses", null)
     .then(result => {
         res.send(result)
@@ -70,10 +71,15 @@ app.get("/courses/:id", (req, res) => {
 //POST
 /////////////////////////////////////////////////////////////////
 
-app.post("/courses", (req, res) => {
+// By adding * you can add any string to access this post, 
+// by then grabbing the url you can then use this string for the name tag in the collection
+app.post("/*", (req, res) => {
     let data = req.body;
+    let endpoint = req.url.split('/')[1];
+    endpoint = endpoint.toLowerCase().replace(/%20/g, '_'); // Remove the spaces and make lowercases
+    data.name = endpoint;
     mongo.create("courses", data)
-    .then(result => {
+    .then(result => { 
         res.send(result)
     })
     .catch(err => {
