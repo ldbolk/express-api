@@ -11,25 +11,6 @@ app.use((req, res, next) => {
     next();
 })
 
-// Variables /////////////
-
-const mongoUrl = "mongodb://localhost:27017"
-const mongoDB = "express"
-const courses = [
-    { id: 1, name: "Javascript" },
-    { id: 2, name: "NodeJS" },
-    { id: 3, name: "Express" }
-];
-
-let course = {
-    name: "Express Server API",
-    level: "Intermediate",
-    technology: ["JavaScript", "NodeJS", "Express", "MongoDB"]
-}
-
-let url = "http://localhost:3000/" // /courses
-
-
 // Other /////////////
 
 
