@@ -46,8 +46,17 @@ app.get("/", (req, res) => {
 
 })
 
+app.get("/collections/:db", (req, res) => {
+    mongo.collectionsDB(req.params.db)
+    .then(result => {
+        res.send(result)
+    })
+    .catch( err => {
+        res.send(err)
+    })
+})
+
 app.get("/*", (req, res) => { //* added so anything can be entered for this call
-    
     mongo.fetch("courses", null)
     .then(result => {
         res.send(result)

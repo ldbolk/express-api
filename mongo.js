@@ -67,6 +67,34 @@ export default class mongo {
         })
     })
 
+    static collectionsDB = (database) => new Promise( (resolve, reject) => {
+
+        MongoClient.connect(mongoUrl, (err, client) => {
+            if(err) {
+                console.log("Database probably doesn't exist")
+                reject({ error: err });
+            }
+            // database = 'express' ////////////////////////
+
+            let db = client.db(database);
+            db.collections((err, result) => {
+                if(result[0] == undefined) {
+                    reject({ error: "Database doesn't exist or doesn't contain collections"})
+                }
+                client.close()
+                if(err) {
+                    reject({ error: err })
+                }
+                let list = []
+                result.forEach(element => {
+                    list.push(element.collectionName)
+                });
+                result = list
+                resolve(result)
+            });
+        })
+    })
+
     static create = (collection, data) => new Promise( (resolve, reject) => {
         MongoClient.connect(mongoUrl, (err, client) => {
             if(err) {
